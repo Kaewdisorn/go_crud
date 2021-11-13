@@ -11,7 +11,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Welcome to the HomePage!")
 }
 
-func handlerequest() {
+func Handlerequest() {
 
 	http.HandleFunc("/test", homePage)
 	http.ListenAndServe(":8080", nil)
