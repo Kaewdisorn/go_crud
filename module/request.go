@@ -13,7 +13,8 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 
 func Handlerequest() {
 
-	http.HandleFunc("/test", homePage)
+	//http.HandleFunc("/", homePage)
+	http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 
 }
