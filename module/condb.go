@@ -9,18 +9,19 @@ import (
 
 func ConDB() (db *sql.DB) {
 
-	//fmt.Println("ConDB Opened")
 	dbDriver := "mysql"
 	dbUser := "root"
 	dbPass := ""
 	dbName := "crud"
+	//var db *sql.DB
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
+	//db, err = sql.Open("mysql", "didiyudha:ytrewq@/blog")
 	if err != nil {
 		panic(err.Error())
 	} else {
 
 		fmt.Println("Connected to DB!")
+		fmt.Println(db)
 	}
-
 	return db
 }
