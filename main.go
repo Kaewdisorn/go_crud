@@ -58,13 +58,13 @@ func main() {
 func homePage(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprint(w, "Welcome to the HomePage!")
-	tmpl.ExecuteTemplate(w, "index.html", nil)
+	tmpl.ExecuteTemplate(w, "index.gohtml", nil)
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprint(w, "Welcome to the HomePage!")
-	tmpl.ExecuteTemplate(w, "register.html", nil)
+	tmpl.ExecuteTemplate(w, "register.gohtml", nil)
 	//http.Redirect(w, r, "http://www.google.com", 301)
 }
 
