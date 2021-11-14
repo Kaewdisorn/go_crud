@@ -15,13 +15,15 @@ type Member struct {
 	Email    string //`json:"email"`
 }
 
-var tmpl = template.Must(template.ParseGlob("html/*"))
+var tmpl = template.Must(template.ParseGlob("html/*")) // Declear variable for Html folder
+var db = m.ConDB()
 
 func main() {
 
 	fmt.Println("Server started on: http://localhost:8080")
-	db := m.ConDB()
-	Handlerequest()
+	//Handlerequest()
+	//db := m.ConDB()
+	//m.ConDB()
 	defer db.Close()
 
 	results, err := db.Query("SELECT * FROM member")
