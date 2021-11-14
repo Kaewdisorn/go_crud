@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http" // import package net-http
+	"text/template"
 
 	m "github.com/Kaewdisorn/module"
 )
@@ -14,11 +15,13 @@ type Member struct {
 	Email    string //`json:"email"`
 }
 
+var tmpl = template.Must(template.ParseGlob("html/*"))
+
 func main() {
 
 	fmt.Println("Server started on: http://localhost:8080")
 	db := m.ConDB()
-	//Handlerequest()
+	Handlerequest()
 	defer db.Close()
 
 	results, err := db.Query("SELECT * FROM member")
@@ -52,13 +55,22 @@ func main() {
 // Create method for client request
 func homePage(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Fprint(w, "Welcome to the HomePage!")
+	//fmt.Fprint(w, "Welcome to the HomePage!")
+	tmpl.ExecuteTemplate(w, "index.html", nil)
+}
+
+func register(w http.ResponseWriter, r *http.Request) {
+
+	//fmt.Fprint(w, "Welcome to the HomePage!")
+	tmpl.ExecuteTemplate(w, "register.html", nil)
 }
 
 func Handlerequest() {
 
-	//http.HandleFunc("/", homePage)
-	http.Handle("/", http.FileServer(http.Dir("./html")))
+	http.HandleFunc("/", homePage)
+	http.HandleFunc("/register", register)
+
+	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 
 }
