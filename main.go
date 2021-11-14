@@ -21,7 +21,7 @@ var db = m.ConDB()
 func main() {
 
 	fmt.Println("Server started on: http://localhost:8080")
-	//Handlerequest()
+	Handlerequest()
 	//db := m.ConDB()
 	//m.ConDB()
 	defer db.Close()
@@ -65,6 +65,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprint(w, "Welcome to the HomePage!")
 	tmpl.ExecuteTemplate(w, "register.html", nil)
+	//http.Redirect(w, r, "http://www.google.com", 301)
 }
 
 func Handlerequest() {

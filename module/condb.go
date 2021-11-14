@@ -21,7 +21,6 @@ func ConDB() (db *sql.DB) {
 	} else {
 
 		fmt.Println("Connected to DB!")
-		fmt.Println(db)
 	}
 	return db
 }
