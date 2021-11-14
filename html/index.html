@@ -5,15 +5,20 @@
 </head>
 <body>
 
-    <h2>HTML Forms</h2>
-    <form action="/action_page.php">
-        <label for="fname">First name:</label><br>
-        <input type="text" id="fname" name="fname" value="John"><br>
-        <label for="lname">Last name:</label><br>
-        <input type="text" id="lname" name="lname" value="Doe"><br><br>
-        <input type="submit" value="Submit">
-      </form> 
+    <h2>Member</h2>
 
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username">
+  </div>
+  <div>
+    <label for="pass">Password</label>
+    <input type="password" id="pass" name="password">
+</div>
+
+<form method="post">
+  <input type="submit" value="Sign in" formaction="/aaa.php">
+  <input type="submit" value="Register" formaction="register.html" >
+</form>
 </body>
 </html>
-
