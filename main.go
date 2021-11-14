@@ -8,10 +8,10 @@ import (
 )
 
 type Member struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
+	ID       int    //`json:"id"`
+	Username string //`json:"username"`
+	Password string //`json:"password"`
+	Email    string //`json:"email"`
 }
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 	/*TEST Query Single Row*/
 	var member Member
 	// Execute the query
-	err = db.QueryRow("SELECT * FROM member where id = ? AND username = ?", 2).Scan(&member.ID, &member.Username, &member.Password, &member.Email)
+	err = db.QueryRow("SELECT * FROM member where id = ?", 2).Scan(&member.ID, &member.Username, &member.Password, &member.Email)
 	if err != nil {
 		panic(err.Error())
 	}
