@@ -7,18 +7,14 @@
 
     <h2>Member</h2>
 
-    <div>
+    <form method="POST">
       <label for="username">Username</label>
-      <input type="text" id="username" name="username">
-  </div>
-  <div>
-    <label for="pass">Password</label>
-    <input type="password" id="pass" name="password">
-</div>
+      <input type="text" id="username" name="username"><br>
+      <label for="pass">Password</label>
+      <input type="password" id="pass" name="password"><br>
+      <input type="submit" value="Sign in" formaction="login">
+      <input type="submit" value="Register" formaction="/register" >
+    </form>
 
-<form method="post">
-  <input type="submit" value="Sign in" formaction="/aaa.php">
-  <input type="submit" value="Register" formaction="/register" >
-</form>
 </body>
 </html>

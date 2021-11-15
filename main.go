@@ -22,8 +22,6 @@ func main() {
 
 	fmt.Println("Server started on: http://localhost:8080")
 	Handlerequest()
-	//db := m.ConDB()
-	//m.ConDB()
 	defer db.Close()
 
 	results, err := db.Query("SELECT * FROM member")
@@ -54,11 +52,42 @@ func main() {
 	fmt.Println(member.ID, member.Username)
 }
 
-// Create method for client request
-func homePage(w http.ResponseWriter, r *http.Request) {
+func Handlerequest() {
 
-	//fmt.Fprint(w, "Welcome to the HomePage!")
+	http.HandleFunc("/", login)
+	//http.HandleFunc("/register", register)
+
+	//http.Handle("/", http.FileServer(http.Dir("./html")))
+	http.ListenAndServe(":8080", nil)
+
+}
+
+// Create method for client request
+func login(w http.ResponseWriter, r *http.Request) {
+
 	tmpl.ExecuteTemplate(w, "index.gohtml", nil)
+
+	if r.Method == "POST" {
+
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		//fmt.Println(username)
+		//fmt.Println(password)
+		result := checkLogin(username, password)
+		fmt.Fprint(w, result)
+	}
+	//fmt.Fprint(w, "Welcome to the HomePage!")
+}
+
+func checkLogin(username, password string) (err error) {
+
+	fmt.Println(username)
+	fmt.Println(password)
+	var uname, pword string
+	//var member Member
+	// Execute the query
+	err = db.QueryRow("SELECT username, password FROM member where username = ?", username).Scan(&uname, &pword)
+	return err
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
@@ -66,14 +95,4 @@ func register(w http.ResponseWriter, r *http.Request) {
 	//fmt.Fprint(w, "Welcome to the HomePage!")
 	tmpl.ExecuteTemplate(w, "register.gohtml", nil)
 	//http.Redirect(w, r, "http://www.google.com", 301)
-}
-
-func Handlerequest() {
-
-	http.HandleFunc("/", homePage)
-	http.HandleFunc("/register", register)
-
-	//http.Handle("/", http.FileServer(http.Dir("./html")))
-	http.ListenAndServe(":8080", nil)
-
 }
