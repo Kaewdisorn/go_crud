@@ -29,7 +29,7 @@ func Handlerequest() {
 
 	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
-	//http.HandleFunc("/register", register)
+	http.HandleFunc("/register", register)
 
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
@@ -58,26 +58,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			//panic(err.Error())
 			fmt.Println(err)
-			templateData := map[string]interface{}{"Incorrect": "ID or Password Incorrect!"}
+			templateData := map[string]interface{}{"Result": "Invalid Username"}
 			tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
-		} else {
+		} else if username == member.Username && password == member.Password {
 			fmt.Println("Login Success")
 			http.Redirect(w, r, "/", http.StatusSeeOther)
+		} else {
+			templateData := map[string]interface{}{"Result": "Invalid Password"}
+			tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
 		}
 	}
 }
-
-/*func checkLogin(username, password string) (err error) {
-
-	fmt.Println(username)
-	fmt.Println(password)
-	var uname, pword string
-	//var member Member
-	// Execute the query
-	err = db.QueryRow("SELECT username, password FROM member where username = ?", username).Scan(&uname, &pword)
-	return err
-
-}*/
 
 func register(w http.ResponseWriter, r *http.Request) {
 
