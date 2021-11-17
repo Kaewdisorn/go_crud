@@ -38,13 +38,12 @@ func Handlerequest() {
 
 func home(w http.ResponseWriter, r *http.Request) {
 
-	templateData := map[string]interface{}{"Name": "Jon Snow"}
-	tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
+	//templateData := map[string]interface{}{"Name": "Jon Snow"}
+	tmpl.ExecuteTemplate(w, "index.gohtml", nil)
 	//tmpl.Execute(w, templateData)
 
 }
 
-// Create method for client request
 func login(w http.ResponseWriter, r *http.Request) {
 
 	var member Member
@@ -59,14 +58,13 @@ func login(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			//panic(err.Error())
 			fmt.Println(err)
+			templateData := map[string]interface{}{"Incorrect": "ID or Password Incorrect!"}
+			tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
 		} else {
 			fmt.Println("Login Success")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
-		//result := checkLogin(username, password)
-		//fmt.Fprint(w, result)
 	}
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-	//fmt.Fprint(w, "Welcome to the HomePage!")
 }
 
 /*func checkLogin(username, password string) (err error) {
