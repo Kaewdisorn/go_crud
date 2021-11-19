@@ -30,7 +30,6 @@ func Handlerequest() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/register", register)
-
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 }
@@ -68,6 +67,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
 func register(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprint(w, "Welcome to the HomePage!")
@@ -77,10 +77,16 @@ func register(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 		email := r.FormValue("email")
-		fmt.Println(username)
-		fmt.Println(password)
-		fmt.Println(email)
+		insertoDB(username, password, email)
 	}
+}
+
+func insertoDB(username, password, email string) {
+
+	fmt.Println(username)
+	fmt.Println(password)
+	fmt.Println(email)
+
 }
 
 /*func main() {
