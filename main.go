@@ -33,7 +33,6 @@ func Handlerequest() {
 
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
-
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -69,12 +68,19 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 func register(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Fprint(w, "Welcome to the HomePage!")
 	tmpl.ExecuteTemplate(w, "register.gohtml", nil)
 	//http.Redirect(w, r, "http://www.google.com", 301)
+	if r.Method == "POST" {
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		email := r.FormValue("email")
+		fmt.Println(username)
+		fmt.Println(password)
+		fmt.Println(email)
+	}
 }
 
 /*func main() {
