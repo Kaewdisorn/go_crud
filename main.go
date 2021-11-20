@@ -30,63 +30,66 @@ func Handlerequest() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/register", register)
+	http.HandleFunc("/insdb", insdb)
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 
-	//templateData := map[string]interface{}{"Name": "Jon Snow"}
 	tmpl.ExecuteTemplate(w, "index.gohtml", nil)
-	//tmpl.Execute(w, templateData)
-
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
 
 	var member Member
+	var templateData = map[string]interface{}{}
 	if r.Method == "POST" {
 
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 		fmt.Println(username)
 		fmt.Println(password)
+
 		err := db.QueryRow("SELECT username, password FROM member where username = ?", username).
 			Scan(&member.Username, &member.Password)
 		if err != nil {
 			//panic(err.Error())
 			fmt.Println(err)
-			templateData := map[string]interface{}{"Result": "Invalid Username"}
-			tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
+			templateData = map[string]interface{}{"Result": "Invalid Username"}
 		} else if username == member.Username && password == member.Password {
 			fmt.Println("Login Success")
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+			templateData = map[string]interface{}{"Result": "Login Success"}
+			//http.Redirect(w, r, "/", http.StatusSeeOther)
 		} else {
-			templateData := map[string]interface{}{"Result": "Invalid Password"}
-			tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
+			templateData = map[string]interface{}{"Result": "Invalid Password"}
 		}
 	}
+	tmpl.ExecuteTemplate(w, "index.gohtml", templateData)
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
 
-	//fmt.Fprint(w, "Welcome to the HomePage!")
 	tmpl.ExecuteTemplate(w, "register.gohtml", nil)
-	//http.Redirect(w, r, "http://www.google.com", 301)
+
+}
+
+func insdb(w http.ResponseWriter, r *http.Request) {
+
 	if r.Method == "POST" {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 		email := r.FormValue("email")
-		insertoDB(username, password, email)
+		//fmt.Println("User = " + username + " Pass = " + password + " Email = " + email)
+		ins, err := db.Prepare("INSERT INTO member(username,password,email) VALUES(?,?,?)")
+		if err != err {
+			panic(err.Error())
+		} else {
+			ins.Exec(username, password, email)
+			fmt.Println("Insert success")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
 	}
-}
-
-func insertoDB(username, password, email string) {
-
-	fmt.Println(username)
-	fmt.Println(password)
-	fmt.Println(email)
-
 }
 
 /*func main() {
