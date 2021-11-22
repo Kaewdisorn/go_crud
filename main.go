@@ -17,6 +17,7 @@ type Member struct {
 
 var tmpl = template.Must(template.ParseGlob("html/*")) // Declear variable for Html folder
 var db = m.ConDB()
+var username string
 
 func main() {
 
@@ -31,6 +32,7 @@ func Handlerequest() {
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/insdb", insdb)
+	http.HandleFunc("/member", show)
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 }
@@ -46,7 +48,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	var templateData = map[string]interface{}{}
 	if r.Method == "POST" {
 
-		username := r.FormValue("username")
+		username = r.FormValue("username")
 		password := r.FormValue("password")
 		fmt.Println(username)
 		fmt.Println(password)
@@ -59,8 +61,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 			templateData = map[string]interface{}{"Result": "Invalid Username"}
 		} else if username == member.Username && password == member.Password {
 			fmt.Println("Login Success")
-			templateData = map[string]interface{}{"Result": "Login Success"}
+			//templateData = map[string]interface{}{"Result": "Login Success"}
+			//templateData = map[string]interface{}{"Uname": username}
+			http.Redirect(w, r, "/member", http.StatusSeeOther)
 			//http.Redirect(w, r, "/", http.StatusSeeOther)
+
 		} else {
 			templateData = map[string]interface{}{"Result": "Invalid Password"}
 		}
@@ -80,7 +85,6 @@ func insdb(w http.ResponseWriter, r *http.Request) {
 		username := r.FormValue("username")
 		password := r.FormValue("password")
 		email := r.FormValue("email")
-		//fmt.Println("User = " + username + " Pass = " + password + " Email = " + email)
 		ins, err := db.Prepare("INSERT INTO member(username,password,email) VALUES(?,?,?)")
 		if err != err {
 			panic(err.Error())
@@ -90,6 +94,11 @@ func insdb(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 	}
+}
+func show(w http.ResponseWriter, r *http.Request) {
+
+	templateData := map[string]interface{}{"Uname": username}
+	tmpl.ExecuteTemplate(w, "member.gohtml", templateData)
 }
 
 /*func main() {
@@ -113,15 +122,4 @@ func insdb(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(member.ID, member.Username, member.Password, member.Email)
 	}
 	defer results.Close()
-
-	//TEST Query Single Row
-	var member Member
-	// Execute the query
-	err = db.QueryRow("SELECT * FROM member where id = ?", 2).Scan(&member.ID, &member.Username, &member.Password, &member.Email)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	fmt.Println("SINGLE ROW QUERY TEST")
-	fmt.Println(member.ID, member.Username)
 }*/
