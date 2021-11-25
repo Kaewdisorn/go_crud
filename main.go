@@ -33,6 +33,7 @@ func Handlerequest() {
 	http.HandleFunc("/register", register)
 	http.HandleFunc("/insdb", insdb)
 	http.HandleFunc("/member", show)
+	http.HandleFunc("/deleteUsers", deleteUsers)
 	//http.Handle("/", http.FileServer(http.Dir("./html")))
 	http.ListenAndServe(":8080", nil)
 }
@@ -76,7 +77,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 func register(w http.ResponseWriter, r *http.Request) {
 
 	tmpl.ExecuteTemplate(w, "register.gohtml", nil)
-
 }
 
 func insdb(w http.ResponseWriter, r *http.Request) {
@@ -97,8 +97,27 @@ func insdb(w http.ResponseWriter, r *http.Request) {
 }
 func show(w http.ResponseWriter, r *http.Request) {
 
-	templateData := map[string]interface{}{"Uname": username}
-	tmpl.ExecuteTemplate(w, "member.gohtml", templateData)
+	//templateData := map[string]interface{}{"Uname": username}
+	selDB, err := db.Query("SELECT id,username,email FROM member")
+	if err != nil {
+		panic(err.Error())
+	} else {
+		users := make([]Member, 0)
+		for selDB.Next() {
+			usr := Member{}
+			selDB.Scan(&usr.ID, &usr.Username, &usr.Email)
+			users = append(users, usr)
+		}
+		fmt.Println(users)
+		tmpl.ExecuteTemplate(w, "member.gohtml", users)
+	}
+}
+
+func deleteUsers(w http.ResponseWriter, r *http.Request) {
+
+	id := r.FormValue("id")
+	fmt.Println(id)
+
 }
 
 /*func main() {
