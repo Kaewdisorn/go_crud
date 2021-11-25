@@ -116,8 +116,14 @@ func show(w http.ResponseWriter, r *http.Request) {
 func deleteUsers(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
-	fmt.Println(id)
-
+	if id == "" {
+		http.Error(w, "Please send ID", http.StatusBadRequest)
+	}
+	_, er := db.Exec("DELETE FROM member WHERE id = ?", id)
+	if er != nil {
+		panic(er.Error())
+	}
+	http.Redirect(w, r, "/member", http.StatusSeeOther)
 }
 
 /*func main() {
