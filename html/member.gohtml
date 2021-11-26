@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <h1>WELCOME</h1>
+    <h1>WELCOME : {{.Uname}}</h1>
     <table border="1">
         <thead>
             <tr>
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
     {{ if . }}
-        {{ range . }}
+        {{ range .Ww }}
         <tr>
             <td>{{ .ID }}</td>
             <td> {{ .Username }} </td>

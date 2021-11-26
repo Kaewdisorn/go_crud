@@ -95,6 +95,7 @@ func insdb(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
 func show(w http.ResponseWriter, r *http.Request) {
 
 	//templateData := map[string]interface{}{"Uname": username}
@@ -109,7 +110,8 @@ func show(w http.ResponseWriter, r *http.Request) {
 			users = append(users, usr)
 		}
 		fmt.Println(users)
-		tmpl.ExecuteTemplate(w, "member.gohtml", users)
+		//tmpl.ExecuteTemplate(w, "member.gohtml",users)
+		tmpl.ExecuteTemplate(w, "member.gohtml", map[string]interface{}{"Uname": username, "Ww": users})
 	}
 }
 
